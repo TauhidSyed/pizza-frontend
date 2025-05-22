@@ -22,9 +22,9 @@ This is the **frontend repository** for the full-stack application. It is built 
 ## 🔧 Getting Started
 
 ### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/frontend-repo.git
-   cd frontend-repo
-   ```
+```bash
+git clone https://github.com/TauhidSyed/pizza-frontend.git
+cd pizza-frontend
+npm i
+npm run dev
+```
