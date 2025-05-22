@@ -47,6 +47,6 @@ export interface CreatePizzaOrderItemDTO {
 
 export interface CreatePizzaOrderDTO {
   customer: number;
-  date?: string;
+  orderDate?: string;
   pizzaOrderItems: CreatePizzaOrderItemDTO[];
 }

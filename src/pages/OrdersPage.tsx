@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import api from '../api';
-import type { PizzaOrder, Customer, Pizza, CreatePizzaOrderItemDTO, CreatePizzaOrderDTO } from '../types';
-
+import React, { useEffect, useState } from "react";
+import api from "../api";
+import type {
+  PizzaOrder,
+  Customer,
+  Pizza,
+  CreatePizzaOrderItemDTO,
+  CreatePizzaOrderDTO,
+} from "../types";
 
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<PizzaOrder[]>([]);
@@ -11,7 +16,9 @@ const OrdersPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // New order form
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(
+    null
+  );
   const [orderItems, setOrderItems] = useState<CreatePizzaOrderItemDTO[]>([]);
 
   useEffect(() => {
@@ -22,16 +29,17 @@ const OrdersPage: React.FC = () => {
     setLoading(true);
     try {
       const [ordersRes, customersRes, pizzasRes] = await Promise.all([
-        api.get<PizzaOrder[]>('/pizza-order'),
-        api.get<Customer[]>('/customer'),
-        api.get<Pizza[]>('/pizzas'),
+        api.get<PizzaOrder[]>("/pizza-order"),
+        api.get<Customer[]>("/customer"),
+        api.get<Pizza[]>("/pizzas"),
       ]);
       setOrders(ordersRes.data);
+      console.log("ORDERS " + JSON.stringify(ordersRes.data));
       setCustomers(customersRes.data);
       setPizzas(pizzasRes.data);
       setError(null);
     } catch {
-      setError('Failed to load data');
+      setError("Failed to load data");
     } finally {
       setLoading(false);
     }
@@ -41,7 +49,11 @@ const OrdersPage: React.FC = () => {
     setOrderItems([...orderItems, { pizzaId: 0, quantity: 1 }]);
   }
 
-  function updateOrderItem(index: number, field: 'pizzaId' | 'quantity', value: number) {
+  function updateOrderItem(
+    index: number,
+    field: "pizzaId" | "quantity",
+    value: number
+  ) {
     const newItems = [...orderItems];
     newItems[index] = { ...newItems[index], [field]: value };
     setOrderItems(newItems);
@@ -54,51 +66,59 @@ const OrdersPage: React.FC = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedCustomerId) {
-      alert('Select a customer');
+      alert("Select a customer");
       return;
     }
     if (orderItems.length === 0) {
-      alert('Add at least one pizza to the order');
+      alert("Add at least one pizza to the order");
       return;
     }
-    if (orderItems.some(item => item.pizzaId === 0 || item.quantity <= 0)) {
-      alert('Fill all order items correctly');
+    if (orderItems.some((item) => item.pizzaId === 0 || item.quantity <= 0)) {
+      alert("Fill all order items correctly");
       return;
     }
 
     const payload: CreatePizzaOrderDTO = {
       customer: selectedCustomerId,
-      date: new Date().toISOString(),
+      orderDate: new Date().toISOString(),
       pizzaOrderItems: orderItems,
     };
 
     try {
-      await api.post('/pizza-order', payload);
+      await api.post("/pizza-order", payload);
       setSelectedCustomerId(null);
       setOrderItems([]);
       fetchAll();
     } catch {
-      alert('Failed to create order');
+      alert("Failed to create order");
     }
   }
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-4">Orders</h2>
+    <div className="container mx-auto p-6">
+      <h2 className="text-4xl font-extrabold mb-8 text-red-700 tracking-wide">
+        Orders
+      </h2>
 
-      <form onSubmit={handleSubmit} className="mb-8 max-w-3xl space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mb-10 max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 space-y-6"
+        noValidate
+      >
         <div>
-          <label className="block mb-1 font-semibold">Customer</label>
+          <label className="block mb-2 font-semibold text-gray-800">
+            Customer
+          </label>
           <select
-            className="border rounded p-2 w-full"
-            value={selectedCustomerId ?? ''}
-            onChange={e => setSelectedCustomerId(Number(e.target.value))}
+            className="border border-gray-300 rounded-md p-3 w-full text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+            value={selectedCustomerId ?? ""}
+            onChange={(e) => setSelectedCustomerId(Number(e.target.value))}
             required
           >
             <option value="" disabled>
               Select Customer
             </option>
-            {customers.map(c => (
+            {customers.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name} ({c.email})
               </option>
@@ -107,21 +127,26 @@ const OrdersPage: React.FC = () => {
         </div>
 
         <div>
-          <label className="block mb-1 font-semibold">Order Items</label>
+          <label className="block mb-3 font-semibold text-gray-800">
+            Order Items
+          </label>
           {orderItems.map((item, i) => (
-            <div key={i} className="flex gap-2 items-center mb-2">
+            <div
+              key={i}
+              className="flex gap-3 items-center mb-4 p-4 bg-gray-50 rounded-md border border-gray-200"
+            >
               <select
-                className="border rounded p-2 flex-grow"
+                className="border border-gray-300 rounded-md p-3 flex-grow text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
                 value={item.pizzaId}
-                onChange={e =>
-                  updateOrderItem(i, 'pizzaId', Number(e.target.value))
+                onChange={(e) =>
+                  updateOrderItem(i, "pizzaId", Number(e.target.value))
                 }
                 required
               >
                 <option value={0} disabled>
                   Select Pizza
                 </option>
-                {pizzas.map(p => (
+                {pizzas.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name} ({p.size}) - ${(p.price / 100).toFixed(2)}
                   </option>
@@ -130,17 +155,18 @@ const OrdersPage: React.FC = () => {
               <input
                 type="number"
                 min={1}
-                className="border rounded p-2 w-24"
+                className="border border-gray-300 rounded-md p-3 w-24 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
                 value={item.quantity}
-                onChange={e =>
-                  updateOrderItem(i, 'quantity', Number(e.target.value))
+                onChange={(e) =>
+                  updateOrderItem(i, "quantity", Number(e.target.value))
                 }
                 required
               />
               <button
                 type="button"
-                className="text-red-600 font-bold px-2"
+                className="text-red-600 font-bold text-2xl px-2 hover:text-red-800 transition"
                 onClick={() => removeOrderItem(i)}
+                aria-label="Remove pizza item"
               >
                 &times;
               </button>
@@ -149,7 +175,7 @@ const OrdersPage: React.FC = () => {
           <button
             type="button"
             onClick={addOrderItem}
-            className="bg-red-600 text-white p-2 rounded hover:bg-red-700"
+            className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold py-3 px-6 rounded-md shadow-md transition"
           >
             Add Pizza
           </button>
@@ -157,47 +183,73 @@ const OrdersPage: React.FC = () => {
 
         <button
           type="submit"
-          className="bg-green-600 text-white p-3 rounded w-full hover:bg-green-700"
+          className="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-extrabold py-4 rounded-md w-full shadow-lg transition"
         >
           Place Order
         </button>
       </form>
 
-      {loading && <p>Loading orders...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && (
+        <p className="text-center text-gray-500 italic">Loading orders...</p>
+      )}
+      {error && (
+        <p className="text-center text-red-600 font-semibold">{error}</p>
+      )}
 
-      <div className="space-y-6">
-        {orders.map(order => (
+      <div className="space-y-10 max-w-5xl mx-auto">
+        {orders.map((o) => (
           <div
-            key={order.id}
-            className="border rounded shadow p-4 bg-white max-w-4xl mx-auto"
+            key={o.id}
+            className="bg-white shadow-lg rounded-lg p-6 flex flex-col space-y-4"
           >
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-              <div>
-                <p className="font-semibold text-lg">
-                  Order #{order.id} -{' '}
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </p>
-                <p className="text-gray-700">
-                  Customer: {order.customer.name} ({order.customer.email})
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {order.pizzaOrderItems.map(item => (
-                <div key={item.id} className="border rounded p-3 flex flex-col items-center">
-                  <img
-                    src={item.pizza.imageUrl}
-                    alt={item.pizza.name}
-                    className="w-full h-36 object-cover rounded mb-2"
-                  />
-                  <p className="font-semibold">{item.pizza.name}</p>
-                  <p className="text-sm text-gray-600">Size: {item.pizza.size}</p>
-                  <p>Qty: {item.quantity}</p>
-                  <p>Price: ${(item.pizza.price / 100).toFixed(2)}</p>
-                </div>
-              ))}
-            </div>
+            <h3 className="text-2xl font-bold text-red-700 mb-2">
+              Order #{o.id} —{" "}
+              {customers.find((c) => c.id === o.customer.id)?.name ??
+                "Unknown Customer"}
+            </h3>
+            <p className="text-gray-600 text-sm italic">
+              Date: {new Date(o.orderDate).toLocaleString()}
+            </p>
+
+            <ul className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+              {o.pizzaOrderItems.map((item, idx) => {
+                const pizza = pizzas.find((p) => p.id === item.pizza.id);
+                if (!pizza) return null;
+                return (
+                  <li
+                    key={idx}
+                    className="flex flex-col items-center bg-gray-50 rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-lg transition group"
+                  >
+                    <div className="w-32 h-32 mb-4 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
+                      {pizza.imageUrl ? (
+                        <img
+                          src={pizza.imageUrl}
+                          alt={pizza.name}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <span className="text-gray-400 text-5xl">🍕</span>
+                      )}
+                    </div>
+                    <div className="mb-1 text-lg font-semibold text-gray-800 text-center">
+                      {pizza.name}
+                    </div>
+                    <div className="mb-1 text-xs text-gray-500 uppercase tracking-wide">
+                      {pizza.size}
+                    </div>
+                    <div className="mb-2 font-bold text-red-600">
+                      Quantity: {item.quantity}
+                    </div>
+                    <div className="text-gray-700 font-mono text-sm">
+                      Price each: ${(pizza.price / 100).toFixed(2)}
+                    </div>
+                    <div className="mt-1 font-semibold text-green-700">
+                      Total: ${((pizza.price * item.quantity) / 100).toFixed(2)}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         ))}
       </div>
