@@ -1,54 +1,27 @@
-# React + TypeScript + Vite
+# TauCodes' Pizzeria - Frontend - React + TypeScript + Vite + Tailwind + Axios
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend repository** for our full-stack application. It is built using **React**, **TypeScript**, **Vite**, **Tailwind CSS**, and **Axios** for seamless API integration.
 
-Currently, two official plugins are available:
+> **Note:** This is the frontend only. The backend is available in a separate repository: [Backend Repository](https://github.com/yourusername/backend-repo)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React**: UI library
+- **TypeScript**: Type-safe development
+- **Vite**: Fast bundler and dev server
+- **Tailwind CSS**: Utility-first CSS framework
+- **Axios**: HTTP client for making API calls
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🔧 Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Installation
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/frontend-repo.git
+   cd frontend-repo
+   ```
