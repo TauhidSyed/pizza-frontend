@@ -1,8 +1,11 @@
-# TauCodes' Pizzeria - Frontend - React + TypeScript + Vite + Tailwind + Axios
+# TauCodes' Pizzeria
+## Frontend - React + TypeScript + Vite + Tailwind + Axios
 
-This is the **frontend repository** for our full-stack application. It is built using **React**, **TypeScript**, **Vite**, **Tailwind CSS**, and **Axios** for seamless API integration.
+This is the **frontend repository** for the full-stack application. It is built using **React**, **TypeScript**, **Vite**, **Tailwind CSS**, and **Axios** for seamless API integration.
 
-> **Note:** This is the frontend only. The backend is available in a separate repository: [Backend Repository](https://github.com/yourusername/backend-repo)
+![image](https://github.com/user-attachments/assets/fd3fbe05-325d-4e08-b77e-97b499ff8217)
+
+> **Note:** This is the frontend only. The backend is available in a separate repository: [Backend Repository](https://github.com/TauhidSyed/pizza-backend)
 
 ---
 
